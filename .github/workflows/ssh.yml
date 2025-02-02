@@ -3,7 +3,7 @@ name: SSH Access Test via VPN
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   test-ssh-access:
