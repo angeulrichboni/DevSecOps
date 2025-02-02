@@ -1,4 +1,4 @@
-name: SSH Access Test via VPN and Deploy Laravel
+name: SSH Access Test via VPN
 
 on:
   push:
@@ -39,29 +39,7 @@ jobs:
           ssh-keyscan -H -p 2823 192.168.10.211 >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
-      # Étape 6 : Tester la connexion SSH
+      # Étape 6 : Tester la connexion SSH via le VPN
       - name: Tester la connexion SSH
         run: |
           ssh -o StrictHostKeyChecking=no -p 2823 adminserver@192.168.10.211 "echo 'Connexion SSH réussie via VPN !' >> /home/adminserver/github.txt"
-
-      # Étape 7 : Copier le fichier .env depuis le dossier deploy
-      - name: Copier le fichier .env
-        run: |
-          scp -o StrictHostKeyChecking=no -P 2823 deploy/.env adminserver@192.168.10.211:/var/www/html/.env
-
-      # Étape 8 : Exécuter les migrations et générer la clé
-      - name: Exécuter les migrations et générer la clé
-        run: |
-          ssh -o StrictHostKeyChecking=no -p 2823 adminserver@192.168.10.211 << 'EOF'
-            cd /var/www/html
-            docker-compose -f /var/www/html/docker-compose.yml run --rm laravel-app php artisan key:generate
-            docker-compose -f /var/www/html/docker-compose.yml run --rm laravel-app php artisan migrate --force
-          EOF
-
-      # Étape 9 : Lancer les services Docker
-      - name: Lancer les services Docker
-        run: |
-          ssh -o StrictHostKeyChecking=no -p 2823 adminserver@192.168.10.211 << 'EOF'
-            cd /var/www/html
-            docker-compose -f /var/www/html/docker-compose.yml up -d
-          EOF
