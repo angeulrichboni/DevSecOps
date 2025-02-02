@@ -42,4 +42,4 @@ jobs:
       # Étape 6 : Tester la connexion SSH via le VPN
       - name: Tester la connexion SSH
         run: |
-          ssh -o StrictHostKeyChecking=no -p 2823 adminserver@192.168.10.211 "echo 'Connexion SSH réussie via VPN !'"
+          ssh -o StrictHostKeyChecking=no -p 2823 adminserver@192.168.10.211 "echo 'Connexion SSH réussie via VPN !' >> /home/adminserver/github.txt"
